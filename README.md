@@ -161,9 +161,9 @@ app.Run();
 ```
 
 ### In this example:
-**AuthService** will be registered as a **Singleton**
-**ShoppingCartService** will be registered as a **Scoped**
-**PaymentService** will be registered as a **Transient**
+**AuthService** will be registered as a **Singleton** <br/>
+**ShoppingCartService** will be registered as a **Scoped** <br/>
+**PaymentService** will be registered as a **Transient** <br/>
 The services will automatically be resolved and injected where required, without needing to manually specify them in Program.cs
 
 ## Conclusion
