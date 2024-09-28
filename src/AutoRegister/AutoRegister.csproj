@@ -5,13 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-	<PackageId>Auto-Register</PackageId>
+    <PackageId>Auto-Register</PackageId>
 	<Authors>Raihan Nishat</Authors>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <!-- Include the icon file in the NuGet package -->
   <ItemGroup>
-	<None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="AutoRegister/" />
   </ItemGroup>
 	
   <ItemGroup>

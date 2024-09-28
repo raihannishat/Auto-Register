@@ -1,8 +1,8 @@
 ﻿namespace AutoRegister;
 
-public class Register
+internal class Register
 {
-    public static void Setup(IServiceCollection services, Assembly assembly)
+    internal static void Setup(IServiceCollection services, Assembly assembly)
     {
         RegisterService.AddServices(services, assembly);
     }
