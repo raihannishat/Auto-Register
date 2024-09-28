@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-	<PackageId>Autoregister</PackageId>
+	<PackageId>MyCustom.Autoregister</PackageId>
 	<Authors>Raihan Nishat</Authors>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
