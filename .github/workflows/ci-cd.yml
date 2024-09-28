@@ -23,13 +23,13 @@ jobs:
       run: dotnet build --configuration Release
       working-directory: ./src/AutoRegister
     - name: Create NuGet Package
-      run: dotnet pack  -c Release /p:Version="2.1.0" /p:PackageReleaseNotes="See https://github.com/nobelrakib/Custom-Repository-Pattern-Nuget_CD" 
+      run: dotnet pack  -c Release /p:Version="2.2.1" /p:PackageReleaseNotes="See https://github.com/nobelrakib/Custom-Repository-Pattern-Nuget_CD" 
       working-directory: ./src/AutoRegister
     - name: Archive NuGet Package
       uses: actions/upload-artifact@v4
       with:
           name: CustomRepository
-          path: ./src/AutoRegister/bin/Release/AutoRegister.2.1.0.nupkg
+          path: ./src/AutoRegister/bin/Release/AutoRegister.2.2.1.nupkg
     - name: Publish Nuget Package
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.my_nuget_package_secret }} --source https://api.nuget.org/v3/index.json -n --skip-duplicate
       
