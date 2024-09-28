@@ -68,7 +68,6 @@ builder.Services.AddAutoregister(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 app.Run();
-
 ```
 
 ## Components
@@ -115,7 +114,6 @@ If you want to register services from multiple assemblies, you can pass those as
 ```csharp
 using AutoRegister;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
