@@ -161,10 +161,10 @@ app.Run();
 ```
 
 ### In this example:
-##### **AuthService** will be registered as a **Singleton**
-##### **ShoppingCartService** will be registered as a **Scoped**
-##### **PaymentService** will be registered as a **Transient**
-#### The services will automatically be resolved and injected where required, without needing to manually specify them in Program.cs
+**AuthService** will be registered as a **Singleton**
+**ShoppingCartService** will be registered as a **Scoped**
+**PaymentService** will be registered as a **Transient**
+The services will automatically be resolved and injected where required, without needing to manually specify them in Program.cs
 
 ## Conclusion
 The **Auto-Register** NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core. By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable service registration logic, especially in large projects with many services.
