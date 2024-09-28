@@ -49,7 +49,6 @@ public class MyTransientService : IMyTransientService
 {
     // Implementation
 }
-
 ```
 
 ### Step 2: Register Services in Program.cs
