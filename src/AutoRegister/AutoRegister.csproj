@@ -1,22 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+		<PackageId>Auto-Register</PackageId>
+		<Authors>Raihan Nishat</Authors>
+		<Description>
+			The Auto-Register NuGet package provides a powerful and flexible way to manage service
+			registration in ASP.NET Core. By automating service discovery and registration, it reduces
+			boilerplate code and helps maintain clean and maintainable service registration logic,
+			especially in large projects with many services.
+		</Description>
+		<PackageTags>
+			dependency-injection;attribute-based-di;aspnet-core;service-registration;
+			automation;auto-register;inversion-of-control;dependency-inversion
+		</PackageTags>
+		<PackageProjectUrl>https://raihannishat.github.io/Auto-Register/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/raihannishat/Auto-Register</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-    <PackageId>Auto-Register</PackageId>
-	<Authors>Raihan Nishat</Authors>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
+	<!-- Include the icon file in the NuGet package -->
+	<ItemGroup>
+		<None Include="icon.png" Pack="true" PackagePath="AutoRegister/" />
+	</ItemGroup>
 
-  <!-- Include the icon file in the NuGet package -->
-  <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="AutoRegister/" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+	</ItemGroup>
 </Project>
