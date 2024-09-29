@@ -6,7 +6,7 @@ The **Auto-Register** package simplifies service registration for ASP.NET Core a
 
 With AutoRegister, services are identified using the RegisterAttribute and are automatically registered as self, interface, or base class implementations.
 
-### Installation
+## Installation
 To install **Auto-Register**, add it to your project using the NuGet Package Manager or .NET CLI:
 #### Using Package Manager:
 ```bash
