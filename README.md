@@ -108,7 +108,7 @@ Service lifetime is controlled via the **RegisterAttribute**, making it easy to 
 
 ## Advanced Usage
 ### Registering External Assemblies
-If you want to register services from multiple assemblies, you can pass those assemblies to the **AddAutoregister** method. For example:
+If you want to register services from **multiple assemblies**, you can pass those assemblies to the **AddAutoregister** method. For example:
 
 ```csharp
 using AutoRegister;
