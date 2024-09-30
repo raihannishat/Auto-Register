@@ -117,8 +117,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register services from multiple assemblies
-builder.Services.AddAutoregister(Assembly.GetExecutingAssembly());
-builder.Services.AddAutoregister(typeof(SomeExternalService).Assembly);
+builder.Services.AddAutoregister(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 app.Run();
