@@ -4,40 +4,45 @@ internal static class RegisterService
 {
     internal static void AddServices(IServiceCollection services, Assembly assembly)
     {
-        List<Type>? typesWithInjectableAttribute = assembly.GetTypes()
+        List<Type> typesWithInjectableAttribute = assembly.GetTypes()
             .Where(t => t.GetCustomAttribute<RegisterAttribute>() != null)
             .ToList();
 
         foreach (var type in typesWithInjectableAttribute)
         {
             var attribute = type.GetCustomAttribute<RegisterAttribute>();
-            var rootBaseInfo = FindTopBaseType(type);
+            var (baseType, interfaces) = FindTopBaseType(type);
 
-            var interfaces = rootBaseInfo.interfaces;
-            var baseType = rootBaseInfo.topBasedType;
+            RegisterSelf(type, attribute!.Lifetime, services);
+            RegisterAbstractBase(baseType, type, attribute.Lifetime, services);
+            RegisterInterfaces(interfaces, type, attribute.Lifetime, services);
+        }
+    }
 
-            // Self-registration only if no interfaces or abstract base classes
-            if (interfaces.Length == 0 && baseType == null)
-            {
-                RegisterServiceIfNotRegistered(services, attribute!.Lifetime, type, type);
-            }
+    private static void RegisterSelf(Type type, ServiceLifetime lifetime, IServiceCollection services)
+    {
+        // Self-registration only if no interfaces or abstract base classes
+        if (!type.IsAbstract && !type.GetInterfaces().Any())
+        {
+            RegisterServiceIfNotRegistered(services, lifetime, type, type);
+        }
+    }
 
-            // AddServices the abstract base class if applicable
-            if (baseType != null && baseType != typeof(object) && baseType.IsAbstract)
-            {
-                RegisterServiceIfNotRegistered(services, attribute!.Lifetime, baseType, type);
-                RegisterServiceIfNotRegistered(services, attribute!.Lifetime, type, type);
-            }
+    private static void RegisterAbstractBase(Type? baseType, Type type, ServiceLifetime lifetime, IServiceCollection services)
+    {
+        if (baseType != null && baseType.IsAbstract && baseType != typeof(object))
+        {
+            RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
+            RegisterServiceIfNotRegistered(services, lifetime, type, type);
+        }
+    }
 
-            // AddServices all implemented interfaces
-            if (interfaces.Length > 0)
-            {
-                foreach (var @interface in interfaces)
-                {
-                    RegisterServiceIfNotRegistered(services, attribute!.Lifetime, @interface, type);
-                    RegisterServiceIfNotRegistered(services, attribute!.Lifetime, type, type);
-                }
-            }
+    private static void RegisterInterfaces(Type[] interfaces, Type type, ServiceLifetime lifetime, IServiceCollection services)
+    {
+        foreach (var @interface in interfaces)
+        {
+            RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
+            RegisterServiceIfNotRegistered(services, lifetime, type, type);
         }
     }
 
@@ -59,7 +64,7 @@ internal static class RegisterService
         }
     }
 
-    private static (Type? topBasedType, Type[] interfaces) FindTopBaseType(Type type)
+    private static (Type? topBaseType, Type[] interfaces) FindTopBaseType(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
@@ -72,7 +77,6 @@ internal static class RegisterService
         }
 
         var interfaces = type.GetInterfaces();
-
         return topBaseType == type ? (null, interfaces) : (topBaseType, interfaces);
     }
 }
