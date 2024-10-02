@@ -41,8 +41,30 @@ internal static class RegisterService
     {
         foreach (var @interface in interfaces)
         {
-            RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
-            RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            if (@interface.IsGenericType)
+            {
+                RegisterGenericInterface(services, lifetime, @interface, type);
+            }
+            else
+            {
+                RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
+            }
+        }
+    }
+
+    private static void RegisterGenericInterface(IServiceCollection services, ServiceLifetime lifetime, Type @interface, Type implementation)
+    {
+        var genericTypeDefinition = @interface.GetGenericTypeDefinition();
+
+        if (implementation.IsGenericType && implementation.IsGenericTypeDefinition)
+        {
+            RegisterServiceIfNotRegistered(services, lifetime, genericTypeDefinition, implementation);
+            RegisterServiceIfNotRegistered(services, lifetime, implementation, implementation);
+        }
+        else
+        {
+            RegisterServiceIfNotRegistered(services, lifetime, @interface, implementation);
+            RegisterServiceIfNotRegistered(services, lifetime, implementation, implementation);
         }
     }
 
@@ -66,8 +88,6 @@ internal static class RegisterService
 
     private static (Type? topBaseType, Type[] interfaces) FindTopBaseType(Type type)
     {
-        ArgumentNullException.ThrowIfNull(type);
-
         Type topBaseType = type;
 
         // Traverse up to find the topmost base type
