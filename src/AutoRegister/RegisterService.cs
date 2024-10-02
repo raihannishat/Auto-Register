@@ -48,6 +48,7 @@ internal static class RegisterService
             else
             {
                 RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
+                RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
         }
     }
