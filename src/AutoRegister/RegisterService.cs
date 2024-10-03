@@ -13,18 +13,24 @@ internal static class RegisterService
             var attribute = type.GetCustomAttribute<RegisterAttribute>();
             var (baseType, interfaces) = FindTopBaseType(type);
 
-            RegisterSelf(type, attribute!.Lifetime, services);
+            RegisterSelf(baseType, type, attribute!.Lifetime, services);
             RegisterAbstractBase(baseType, type, attribute.Lifetime, services);
             RegisterInterfaces(interfaces, type, attribute.Lifetime, services);
         }
     }
 
-    private static void RegisterSelf(Type type, ServiceLifetime lifetime, IServiceCollection services)
+    private static void RegisterSelf(Type? baseType, Type type, ServiceLifetime lifetime, IServiceCollection services)
     {
-        // Self-registration only if no interfaces or abstract base classes
-        if (!type.IsAbstract && !type.GetInterfaces().Any())
+        if (!type.IsAbstract && type.GetInterfaces().Length == 0 && baseType == null)
         {
-            RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            if (type.IsGenericType && type.IsGenericTypeDefinition)
+            {
+                RegisterServiceIfNotRegistered(services, lifetime, type.GetGenericTypeDefinition(), type);
+            }
+            else
+            {
+                RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            }
         }
     }
 
@@ -32,8 +38,16 @@ internal static class RegisterService
     {
         if (baseType != null && baseType.IsAbstract && baseType != typeof(object))
         {
-            RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
-            RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            if (baseType.IsGenericType && baseType.IsGenericTypeDefinition)
+            {
+                RegisterServiceIfNotRegistered(services, lifetime, baseType.GetGenericTypeDefinition(), type);
+                RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            }
+            else
+            {
+                RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
+                RegisterServiceIfNotRegistered(services, lifetime, type, type);
+            }
         }
     }
 
@@ -55,11 +69,9 @@ internal static class RegisterService
 
     private static void RegisterGenericInterface(IServiceCollection services, ServiceLifetime lifetime, Type @interface, Type implementation)
     {
-        var genericTypeDefinition = @interface.GetGenericTypeDefinition();
-
         if (implementation.IsGenericType && implementation.IsGenericTypeDefinition)
         {
-            RegisterServiceIfNotRegistered(services, lifetime, genericTypeDefinition, implementation);
+            RegisterServiceIfNotRegistered(services, lifetime, @interface.GetGenericTypeDefinition(), implementation);
             RegisterServiceIfNotRegistered(services, lifetime, implementation, implementation);
         }
         else
