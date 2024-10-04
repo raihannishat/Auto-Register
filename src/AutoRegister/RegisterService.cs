@@ -11,10 +11,10 @@ internal static class RegisterService
         foreach (var type in typesWithInjectableAttribute)
         {
             var attribute = type.GetCustomAttribute<RegisterAttribute>();
-            var (baseType, interfaces) = FindTopBaseType(type);
+            var (baseType, interfaces) = FindBaseOrInterfaceType(type);
 
             RegisterSelf(baseType, type, attribute!.Lifetime, services);
-            RegisterAbstractBase(baseType, type, attribute.Lifetime, services);
+            RegisterAbstractOrBase(baseType, type, attribute.Lifetime, services);
             RegisterInterfaces(interfaces, type, attribute.Lifetime, services);
         }
     }
@@ -26,6 +26,7 @@ internal static class RegisterService
             if (type.IsGenericType && type.IsGenericTypeDefinition)
             {
                 RegisterServiceIfNotRegistered(services, lifetime, type.GetGenericTypeDefinition(), type);
+                RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
             else
             {
@@ -34,17 +35,28 @@ internal static class RegisterService
         }
     }
 
-    private static void RegisterAbstractBase(Type? baseType, Type type, ServiceLifetime lifetime, IServiceCollection services)
+    private static void RegisterAbstractOrBase(Type? baseType, Type type, ServiceLifetime lifetime, IServiceCollection services)
     {
-        if (baseType != null && baseType.IsAbstract && baseType != typeof(object))
+        if (baseType == null) return;
+
+        if (baseType != typeof(object) && baseType.IsClass)
         {
-            if (baseType.IsGenericType && baseType.IsGenericTypeDefinition)
+            if (!baseType.IsGenericType && type.IsGenericTypeDefinition)
             {
+                // Handle non-generic abstract or base class with a generic implementation.
+                var genericImplementation = type.MakeGenericType(typeof(object));
+                RegisterServiceIfNotRegistered(services, lifetime, baseType, genericImplementation);
+                RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+            }
+            else if (baseType.IsGenericType && baseType.IsGenericTypeDefinition)
+            {
+                // Register generic abstract or base class with a generic implementation.
                 RegisterServiceIfNotRegistered(services, lifetime, baseType.GetGenericTypeDefinition(), type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
             else
             {
+                // Register regular non-generic abstract or base class.
                 RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
@@ -55,12 +67,21 @@ internal static class RegisterService
     {
         foreach (var @interface in interfaces)
         {
-            if (@interface.IsGenericType)
+            if (!@interface.IsGenericType && type.IsGenericTypeDefinition)
             {
+                // Handle non-generic interface a generic implementation.
+                var genericImplementation = type.MakeGenericType(typeof(object));
+                RegisterServiceIfNotRegistered(services, lifetime, @interface, genericImplementation);
+                RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+            }
+            else if (@interface.IsGenericType)
+            {
+                // Handle generic interface with a generic implementation.
                 RegisterGenericInterface(services, lifetime, @interface, type);
             }
             else
             {
+                // Register regular non-generic interface.
                 RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
@@ -99,17 +120,16 @@ internal static class RegisterService
         }
     }
 
-    private static (Type? topBaseType, Type[] interfaces) FindTopBaseType(Type type)
+    private static (Type? baseType, Type[] interfaces) FindBaseOrInterfaceType(Type type)
     {
-        Type topBaseType = type;
+        Type baseType = type.BaseType!;
 
-        // Traverse up to find the topmost base type
-        while (topBaseType.BaseType != null && topBaseType.BaseType != typeof(object))
+        if (baseType == typeof(object))
         {
-            topBaseType = topBaseType.BaseType;
+            baseType = null!;
         }
 
         var interfaces = type.GetInterfaces();
-        return topBaseType == type ? (null, interfaces) : (topBaseType, interfaces);
+        return (baseType, interfaces);
     }
 }
