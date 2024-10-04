@@ -39,24 +39,24 @@ internal static class RegisterService
     {
         if (baseType == null) return;
 
-        if (baseType != typeof(object) && baseType.IsClass)
+        if (baseType != typeof(object) && baseType.IsClass && !type.IsAbstract)
         {
             if (!baseType.IsGenericType && type.IsGenericTypeDefinition)
             {
-                // Handle non-generic abstract or base class with a generic implementation.
+                // Handle non-generic abstract base class with a generic implementation.
                 var genericImplementation = type.MakeGenericType(typeof(object));
                 RegisterServiceIfNotRegistered(services, lifetime, baseType, genericImplementation);
                 RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
             }
             else if (baseType.IsGenericType && baseType.IsGenericTypeDefinition)
             {
-                // Register generic abstract or base class with a generic implementation.
+                // Register generic abstract base class with a generic implementation.
                 RegisterServiceIfNotRegistered(services, lifetime, baseType.GetGenericTypeDefinition(), type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
             else
             {
-                // Register regular non-generic abstract or base class.
+                // Register regular non-generic abstract class.
                 RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
@@ -67,21 +67,23 @@ internal static class RegisterService
     {
         foreach (var @interface in interfaces)
         {
+            if (type.IsAbstract) continue;
+
             if (!@interface.IsGenericType && type.IsGenericTypeDefinition)
             {
-                // Handle non-generic interface a generic implementation.
+                // Handle non-generic interface base class with a generic implementation.
                 var genericImplementation = type.MakeGenericType(typeof(object));
                 RegisterServiceIfNotRegistered(services, lifetime, @interface, genericImplementation);
                 RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
             }
             else if (@interface.IsGenericType)
             {
-                // Handle generic interface with a generic implementation.
+                // Handle generic interface base class with a generic implementation.
                 RegisterGenericInterface(services, lifetime, @interface, type);
             }
             else
             {
-                // Register regular non-generic interface.
+                // Register regular non-generic interface class.
                 RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
