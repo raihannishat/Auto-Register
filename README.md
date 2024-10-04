@@ -95,7 +95,7 @@ public class MyService : IMyService
 Services marked with the RegisterAttribute are automatically discovered and registered based on their lifetime **(Singleton, Scoped, or Transient)**
 
 ### 2. Interface and Base Class Registration:
-Classes can be registered not only as themselves but also as their **interfaces, abstract or any base** base classes.
+Classes can be registered not only as themselves but also as their **interfaces, abstract or any base** classes.
 
 ### 3. Self-Registration:
 Classes that do not implement interfaces or inherit from abstract base classes can still be **self-registered** in the service collection.
