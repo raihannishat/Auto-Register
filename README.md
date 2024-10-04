@@ -487,7 +487,7 @@ public class OpenGenericService<T>
 Executing Scoped HybridService.
 Executing Scoped OpenGenericService with type: System.Int32.
 
-### Example 11: Multy-Layer Inheritance (Non-Generic and Generic)
+### Example 11: Multi-Layer Inheritance (Non-Generic and Generic)
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
