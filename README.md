@@ -168,7 +168,7 @@ app.Run();
 Currently, all services marked with the **RegisterAttribute** in the provided assemblies will be registered. If you want to exclude certain services, you would need to manually intervene before the registration process.
 
 ## Supported Platforms
-Auto-Register is designed for use in console applications. However, it can also be utilized in other types of .NET applications that support Microsoft Dependency Injection, including:
+Auto-Register is designed for use any types of .NET applications that support Microsoft Dependency Injection, including:
 
 * ASP.NET Core Applications
 * Worker Services
