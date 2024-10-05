@@ -497,7 +497,7 @@ var services = new ServiceCollection();
 services.AddAutoregister(Assembly.GetExecutingAssembly());
 using var serviceProvider = services.BuildServiceProvider();
 
-var myService = serviceProvider.GetRequiredService<BaseService>();
+var myService = serviceProvider.GetRequiredService<LayeredService>();
 myService.DoExecute<int>();
 
 public abstract class BaseService
