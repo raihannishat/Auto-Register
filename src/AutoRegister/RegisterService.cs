@@ -43,10 +43,15 @@ internal static class RegisterService
         {
             if (!baseType.IsGenericType && type.IsGenericTypeDefinition)
             {
-                // Handle non-generic abstract base class with a generic implementation.
-                var genericImplementation = type.MakeGenericType(typeof(object));
-                RegisterServiceIfNotRegistered(services, lifetime, baseType, genericImplementation);
-                RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+                // Register non-generic abstract base class with a generic implementation.
+                var genericArgs = GetValidGenericArguments(type);
+
+                if (genericArgs != null)
+                {
+                    var genericImplementation = type.MakeGenericType(genericArgs);
+                    RegisterServiceIfNotRegistered(services, lifetime, baseType, genericImplementation);
+                    RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+                }
             }
             else if (baseType.IsGenericType && baseType.IsGenericTypeDefinition)
             {
@@ -56,7 +61,7 @@ internal static class RegisterService
             }
             else
             {
-                // Register regular non-generic abstract class.
+                // Register regular non-generic abstract base class with implementation 
                 RegisterServiceIfNotRegistered(services, lifetime, baseType, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
@@ -71,19 +76,24 @@ internal static class RegisterService
 
             if (!@interface.IsGenericType && type.IsGenericTypeDefinition)
             {
-                // Handle non-generic interface base class with a generic implementation.
-                var genericImplementation = type.MakeGenericType(typeof(object));
-                RegisterServiceIfNotRegistered(services, lifetime, @interface, genericImplementation);
-                RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+                // Register non-generic interface base with a generic implementation.
+                var genericArgs = GetValidGenericArguments(type);
+
+                if (genericArgs != null)
+                {
+                    var genericImplementation = type.MakeGenericType(genericArgs);
+                    RegisterServiceIfNotRegistered(services, lifetime, @interface, genericImplementation);
+                    RegisterServiceIfNotRegistered(services, lifetime, genericImplementation, genericImplementation);
+                }
             }
             else if (@interface.IsGenericType)
             {
-                // Handle generic interface base class with a generic implementation.
+                // Register generic interface base class with a generic implementation.
                 RegisterGenericInterface(services, lifetime, @interface, type);
             }
             else
             {
-                // Register regular non-generic interface class.
+                // Register regular non-generic interface base with implementation 
                 RegisterServiceIfNotRegistered(services, lifetime, @interface, type);
                 RegisterServiceIfNotRegistered(services, lifetime, type, type);
             }
@@ -124,14 +134,32 @@ internal static class RegisterService
 
     private static (Type? baseType, Type[] interfaces) FindBaseOrInterfaceType(Type type)
     {
-        Type baseType = type.BaseType!;
-
-        if (baseType == typeof(object))
-        {
-            baseType = null!;
-        }
-
+        Type? baseType = type.BaseType != typeof(object) ? type.BaseType : null;
         var interfaces = type.GetInterfaces();
         return (baseType, interfaces);
+    }
+
+    private static Type[]? GetValidGenericArguments(Type type)
+    {
+        // Resolve generic arguments based on constraints dynamically
+        var genericArguments = type.GetGenericArguments();
+        var typeArguments = new Type[genericArguments.Length];
+
+        for (int i = 0; i < genericArguments.Length; i++)
+        {
+            var argumentConstraints = genericArguments[i].GetGenericParameterConstraints();
+
+            if (argumentConstraints.Length > 0)
+            {
+                typeArguments[i] = argumentConstraints[0];
+            }
+            else
+            {
+                // Default to `typeof(object)` if no constraints are found
+                typeArguments[i] = typeof(object);
+            }
+        }
+
+        return typeArguments.Length > 0 ? typeArguments : null;
     }
 }
