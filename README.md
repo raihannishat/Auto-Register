@@ -205,8 +205,8 @@ public class MyService<T> : IMyService<T>
     }
 }
 ```
-[Output] : Executed Scoped Service with type System.Int32
-
+#### [Output] : Executed Scoped Service with type System.Int32
+##
 ### Example 2: Closed Generic Interface and Class
 ```csharp
 using AutoRegister;
@@ -234,8 +234,8 @@ public class ClosedGenericService : IClosedGenericService<int>
     }
 }
 ```
-[Output] : Processing Closed Generic Service with int 99
-
+#### [Output] : Processing Closed Generic Service with int 99
+##
 ### Example 3: Multiple Generic Types
 ```csharp
 using AutoRegister;
@@ -263,8 +263,8 @@ public class MyService : IMyService<int, string>
     }
 }
 ```
-[Output] : Executed Transient with 5 and Auto-Register
-
+#### [Output] : Executed Transient with 5 and Auto-Register
+##
 ### Example 4: Non-Generic Interface and Class
 ```csharp
 using AutoRegister;
@@ -292,8 +292,8 @@ public class MyService : IMyService
     }
 }
 ```
-[Output] : Non-generic service executed (Singleton)
-
+#### [Output] : Non-generic service executed (Singleton)
+##
 ### Example 5: Open Generic Interface and Class
 ```csharp
 using AutoRegister;
@@ -321,8 +321,8 @@ public class MyService<T> : IMyService<T>
     }
 }
 ```
-[Output] : Executed Scoped with System.Int32
-
+#### [Output] : Executed Scoped with System.Int32
+##
 ### Example 6: Closed Generic Class with Concrete Types
 ```csharp
 using AutoRegister;
@@ -355,8 +355,8 @@ public class MyGenericService<T>
     }
 }
 ```
-[Output] : Executed with closed generic type: System.Int32
-
+#### [Output] : Executed with closed generic type: System.Int32
+##
 ### Example 7: Complex Generic Class with Constraints
 ```csharp
 using AutoRegister;
@@ -384,8 +384,8 @@ public class MyService<T> : IMyService<T> where T : struct
     }
 }
 ```
-[Output] : Executed Singleton with System.Int32
-
+#### [Output] : Executed Singleton with System.Int32
+##
 ### Example 8: Generic with Multiple Constraints
 ```csharp
 using AutoRegister;
@@ -413,8 +413,8 @@ public class MyService<T> : IMyService<T> where T : struct, IComparable
     }
 }
 ```
-[Output] : Executed Scoped with System.Int32 and constraint
-
+#### [Output] : Executed Scoped with System.Int32 and constraint
+##
 ### Example 9: Nested Generics
 ```csharp
 using AutoRegister;
@@ -442,8 +442,8 @@ public class MyService<T> : IMyService<T>
     }
 }
 ```
-[Output] : Executed Transient with nested System.Collections.Generic.List`1[System.Int32]
-
+#### [Output] : Executed Transient with nested System.Collections.Generic.List`1[System.Int32]
+##
 ### Example 10: Hybrid Non-Generic and Generic Services
 ```csharp
 using AutoRegister;
@@ -483,10 +483,10 @@ public class OpenGenericService<T>
     }
 }
 ```
-[Output] : 
-Executing Scoped HybridService.
-Executing Scoped OpenGenericService with type: System.Int32.
-
+#### [Output] : 
+#### Executing Scoped HybridService.
+#### Executing Scoped OpenGenericService with type: System.Int32.
+##
 ### Example 11: Multi-Layer Inheritance (Non-Generic and Generic)
 ```csharp
 using AutoRegister;
@@ -524,10 +524,10 @@ public class LayeredService : GenericBaseService<int>
     }
 }
 ```
-[Output] : 
-Executing Singleton LayeredService.
-Executing Singleton GenericBaseService with type: System.Int32
-
+#### [Output] : 
+#### Executing Singleton LayeredService.
+#### Executing Singleton GenericBaseService with type: System.Int32
+##
 ### Example 12: Multiple Implementations Abstract and Interface Non-Generic and Generic Services (Scoped)
 ```csharp
 using AutoRegister;
@@ -575,7 +575,7 @@ public interface IServiceFactory
     IService CreateService();
 }
 ```
-[Output] : Executing Scoped ServiceImplementationA with type: System.String.
-
+#### [Output] : Executing Scoped ServiceImplementationA with type: System.String.
+##
 ## Conclusion
 The **Auto-Register** NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core. By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable service registration logic, especially in large projects with many services.
