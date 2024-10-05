@@ -528,7 +528,7 @@ public class LayeredService : GenericBaseService<int>
 #### Executing Singleton LayeredService.
 #### Executing Singleton GenericBaseService with type: System.Int32
 ##
-### Example 12: Multiple Implementations Abstract and Interface Non-Generic and Generic Services (Scoped)
+### Example 12: Multiple Implementations Abstract and Interface Non-Generic and Generic Services
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -576,6 +576,67 @@ public interface IServiceFactory
 }
 ```
 #### [Output] : Executing Scoped ServiceImplementationA with type: System.String.
+##
+### Example 13: Complex Generic Class with inheritance and interface implementation
+```csharp
+using AutoRegister;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+
+var services = new ServiceCollection();
+services.AddAutoregister(Assembly.GetExecutingAssembly());
+using var serviceProvider = services.BuildServiceProvider();
+
+var myCar = serviceProvider.GetRequiredService<ElectricCar>();
+Console.WriteLine(myCar.Drive());
+
+public class Vehicle
+{
+    public virtual string StartEngine()
+    {
+        return "Engine started.";
+    }
+}
+
+public abstract class LandVehicle : Vehicle
+{
+    public abstract string Drive();
+}
+
+public interface ITransport
+{
+    string GetTransportMode();
+}
+
+[Register(ServiceLifetime.Scoped)]
+public class Car<T> : LandVehicle, ITransport where T : Vehicle, new()
+{
+    public override string Drive()
+    {
+        return "Driving on the road.";
+    }
+
+    public string GetTransportMode()
+    {
+        return "Land transport";
+    }
+
+    public override string StartEngine()
+    {
+        return "Car engine started.";
+    }
+}
+
+[Register(ServiceLifetime.Scoped)]
+public class ElectricCar : Car<ElectricCar>
+{
+    public override string Drive()
+    {
+        return "Driving silently on electric power.";
+    }
+}
+```
+#### [Output] : Driving silently on electric power.
 ##
 ## Conclusion
 The **Auto-Register** NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core. By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable service registration logic, especially in large projects with many services.
