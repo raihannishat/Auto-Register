@@ -590,6 +590,7 @@ using var serviceProvider = services.BuildServiceProvider();
 var myCar = serviceProvider.GetRequiredService<ElectricCar>();
 Console.WriteLine(myCar.Drive());
 
+[Register(ServiceLifetime.Scoped)]
 public class Vehicle
 {
     public virtual string StartEngine()
