@@ -510,7 +510,7 @@ services.AddAutoregister(Assembly.GetExecutingAssembly());
 using var serviceProvider = services.BuildServiceProvider();
 
 var myService = serviceProvider.GetRequiredService<IServiceFactory>()
-    .CreateService("A");
+    .GetService("A");
 
 myService.DoExecute<string>();
 
@@ -547,7 +547,7 @@ public class ServiceFactory : IServiceFactory
         _serviceProvider = serviceProvider;
     }
 
-    public IService CreateService(string implementationType)
+    public IService GetService(string implementationType)
     {
         return implementationType switch
         {
@@ -560,7 +560,7 @@ public class ServiceFactory : IServiceFactory
 
 public interface IServiceFactory
 {
-    IService CreateService(string implementationType);
+    IService GetService(string implementationType);
 }
 ```
 #### [Output] : Executing Scoped ServiceImplementationA with type: System.String.
