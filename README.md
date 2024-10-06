@@ -178,7 +178,7 @@ Auto-Register is designed for use any types of .NET applications that support Mi
 
 I am showing some examples through a **console** application
 
-### Example 1: Simple Generic Interface and Class
+### Example 1: Simple Open Generic Interface and Class
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -294,36 +294,7 @@ public class MyService : IMyService
 ```
 #### [Output] : Non-generic service executed (Singleton)
 ##
-### Example 5: Open Generic Interface and Class
-```csharp
-using AutoRegister;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-
-var services = new ServiceCollection();
-services.AddAutoregister(Assembly.GetExecutingAssembly());
-using var serviceProvider = services.BuildServiceProvider();
-
-var myService = serviceProvider.GetRequiredService<IMyService<int>>();
-myService.DoExecute();
-
-public interface IMyService<T>
-{
-    void DoExecute();
-}
-
-[Register(ServiceLifetime.Scoped)]
-public class MyService<T> : IMyService<T>
-{
-    public void DoExecute()
-    {
-        Console.WriteLine($"Executed Scoped with {typeof(T)}");
-    }
-}
-```
-#### [Output] : Executed Scoped with System.Int32
-##
-### Example 6: Closed Generic Class with Concrete Types
+### Example 5: Closed Generic Class with Concrete Types
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -357,7 +328,7 @@ public class MyGenericService<T>
 ```
 #### [Output] : Executed with closed generic type: System.Int32
 ##
-### Example 7: Complex Generic Class with Constraints
+### Example 6: Complex Generic Class with Constraints
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -386,7 +357,7 @@ public class MyService<T> : IMyService<T> where T : struct
 ```
 #### [Output] : Executed Singleton with System.Int32
 ##
-### Example 8: Generic with Multiple Constraints
+### Example 7: Generic with Multiple Constraints
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -415,7 +386,7 @@ public class MyService<T> : IMyService<T> where T : struct, IComparable
 ```
 #### [Output] : Executed Scoped with System.Int32 and constraint
 ##
-### Example 9: Nested Generics
+### Example 8: Nested Generics
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -444,7 +415,7 @@ public class MyService<T> : IMyService<T>
 ```
 #### [Output] : Executed Transient with nested System.Collections.Generic.List`1[System.Int32]
 ##
-### Example 10: Hybrid Non-Generic and Generic Services
+### Example 9: Hybrid Non-Generic and Generic Services
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -487,7 +458,7 @@ public class OpenGenericService<T>
 #### Executing Scoped HybridService.
 #### Executing Scoped OpenGenericService with type: System.Int32.
 ##
-### Example 11: Multi-Layer Inheritance (Non-Generic and Generic)
+### Example 10: Multi-Layer Inheritance (Non-Generic and Generic)
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -528,7 +499,7 @@ public class LayeredService : GenericBaseService<int>
 #### Executing Singleton LayeredService.
 #### Executing Singleton GenericBaseService with type: System.Int32
 ##
-### Example 12: Multiple Implementations Abstract and Interface Non-Generic and Generic Services
+### Example 11: Multiple Implementations of Interface Non-Generic and Generic Services
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -538,7 +509,9 @@ var services = new ServiceCollection();
 services.AddAutoregister(Assembly.GetExecutingAssembly());
 using var serviceProvider = services.BuildServiceProvider();
 
-var myService = serviceProvider.GetRequiredService<IServiceFactory>().CreateService();
+var myService = serviceProvider.GetRequiredService<IServiceFactory>()
+    .CreateService("A");
+
 myService.DoExecute<string>();
 
 public interface IService
@@ -567,17 +540,32 @@ public class ServiceImplementationB : IService
 [Register(ServiceLifetime.Scoped)]
 public class ServiceFactory : IServiceFactory
 {
-    public IService CreateService() => new ServiceImplementationA();
+    private readonly IServiceProvider _serviceProvider;
+
+    public ServiceFactory(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public IService CreateService(string implementationType)
+    {
+        return implementationType switch
+        {
+            "A" => _serviceProvider.GetRequiredService<ServiceImplementationA>(),
+            "B" => _serviceProvider.GetRequiredService<ServiceImplementationB>(),
+            _ => throw new ArgumentException($"Service type {implementationType} is not supported.")
+        };
+    }
 }
 
 public interface IServiceFactory
 {
-    IService CreateService();
+    IService CreateService(string implementationType);
 }
 ```
 #### [Output] : Executing Scoped ServiceImplementationA with type: System.String.
 ##
-### Example 13: Complex Generic Class with inheritance and interface implementation
+### Example 12: Complex Generic Class with inheritance and interface implementation
 ```csharp
 using AutoRegister;
 using Microsoft.Extensions.DependencyInjection;
@@ -588,52 +576,52 @@ services.AddAutoregister(Assembly.GetExecutingAssembly());
 using var serviceProvider = services.BuildServiceProvider();
 
 var myCar = serviceProvider.GetRequiredService<ElectricCar>();
-Console.WriteLine(myCar.Drive());
+myCar.Drive();
 
 [Register(ServiceLifetime.Scoped)]
 public class Vehicle
 {
-    public virtual string StartEngine()
+    public virtual void StartEngine()
     {
-        return "Engine started.";
+        Console.WriteLine("Engine started.");
     }
 }
 
 public abstract class LandVehicle : Vehicle
 {
-    public abstract string Drive();
+    public abstract void Drive();
 }
 
 public interface ITransport
 {
-    string GetTransportMode();
+    void GetTransportMode();
 }
 
 [Register(ServiceLifetime.Scoped)]
 public class Car<T> : LandVehicle, ITransport where T : Vehicle, new()
 {
-    public override string Drive()
+    public override void Drive()
     {
-        return "Driving on the road.";
+        Console.WriteLine("Driving on the road.");
     }
 
-    public string GetTransportMode()
+    public void GetTransportMode()
     {
-        return "Land transport";
+        Console.WriteLine("Land transport");
     }
 
-    public override string StartEngine()
+    public override void StartEngine()
     {
-        return "Car engine started.";
+        Console.WriteLine("Car engine started.");
     }
 }
 
 [Register(ServiceLifetime.Scoped)]
 public class ElectricCar : Car<ElectricCar>
 {
-    public override string Drive()
+    public override void Drive()
     {
-        return "Driving silently on electric power.";
+        Console.WriteLine("Driving silently on electric power.");
     }
 }
 ```
