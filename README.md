@@ -92,7 +92,7 @@ public class PaymentService : IPaymentService
     // Transient service for handling payments
 }
 
-// Program.cs (ASP.NET Core 6+)
+// Program.cs (ASP.NET Core 5.0+)
 var builder = WebApplication.CreateBuilder(args);
 
 // Automatically register services
