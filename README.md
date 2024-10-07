@@ -58,7 +58,7 @@ public class MyTransientService : IMyTransientService
 ### Step 2: Register Services in Program.cs
 In your ASP.NET Core application, use the **AddAutoregister** extension method to automatically register services from a given assembly.
 
-If using **ASP.NET Core 6.0+** with a minimal hosting model (Program.cs), add the auto-registration in the ConfigureServices section
+If using **ASP.NET Core 5.0+** with a minimal hosting model (Program.cs), add the auto-registration in the ConfigureServices section
 
 ```csharp
 using AutoRegister;
