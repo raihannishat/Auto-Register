@@ -1,3 +1,5 @@
+<link rel="shortcut icon" type="image/x-icon" href="[favicon.ico](https://github.com/raihannishat/Auto-Register/blob/main/src/AutoRegister/icon.png)">
+
 # Auto-Register
 ## Overview
 ![Package Icon](https://github.com/raihannishat/Auto-Register/blob/main/src/AutoRegister/icon.png?raw=true) <br/>
