@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
@@ -20,9 +20,6 @@
 
 		<!-- Embedding package icon in the package -->
 		<PackageIcon>icon.png</PackageIcon>
-
-		<!-- URL to the icon for NuGet.org -->
-		<PackageIconUrl>https://github.com/raihannishat/Auto-Register/raw/main/icon.png</PackageIconUrl>
 
 		<!-- License information -->
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -52,6 +49,6 @@
 		</PackageReference>
 
 		<!-- Ensure icon.png is packed correctly -->
-		<None Include="..\..\icon.png" Pack="true" PackagePath=""/>
+		<None Include="icon.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 </Project>

@@ -18,18 +18,18 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '6.0.x'
     - name: Build with dotnet
       run: dotnet build --configuration Release
       working-directory: ./src/AutoRegister
     - name: Create NuGet Package
-      run: dotnet pack -c Release /p:Version="8.0.3" /p:PackageReleaseNotes="See https://github.com/raihannishat/Auto-Register" 
+      run: dotnet pack -c Release /p:Version="8.0.4" /p:PackageReleaseNotes="See https://github.com/raihannishat/Auto-Register" 
       working-directory: ./src/AutoRegister
     - name: Archive NuGet Package
       uses: actions/upload-artifact@v4
       with:
           name: AutoRegister
-          path: ./src/AutoRegister/bin/Release/AutoRegister.8.0.3.nupkg
+          path: ./src/AutoRegister/bin/Release/AutoRegister.8.0.4.nupkg
     - name: Publish Nuget Package
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.my_nuget_package_secret }} --source https://api.nuget.org/v3/index.json -n --skip-duplicate
       
