@@ -1,3 +1,5 @@
+<link rel="shortcut icon" type="image/x-icon" href="[favicon.ico](https://github.com/raihannishat/Auto-Register/blob/main/src/AutoRegister/icon.png)">
+
 # Auto-Register
 ## Overview
 ![Package Icon](https://github.com/raihannishat/Auto-Register/blob/main/src/AutoRegister/icon.png?raw=true) <br/>
@@ -5,6 +7,8 @@
 The **Auto-Register** package simplifies service registration for ASP.NET Core applications by automatically discovering and registering services based on custom attributes. This package eliminates the need for manually adding services in Program.cs, supports multiple service lifetimes, and ensures no duplicate registrations occur.
 
 With Auto-Register, services are identified using the RegisterAttribute and are automatically registered as self, interface, or base class implementations.
+
+[Nuget] : https://www.nuget.org/packages/Auto-Register
 
 ## Installation
 To install **Auto-Register**, add it to your project using the NuGet Package Manager or .NET CLI:
@@ -54,7 +58,7 @@ public class MyTransientService : IMyTransientService
 ### Step 2: Register Services in Program.cs
 In your ASP.NET Core application, use the **AddAutoregister** extension method to automatically register services from a given assembly.
 
-If using **ASP.NET Core 6.0+** with a minimal hosting model (Program.cs), add the auto-registration in the ConfigureServices section
+If using **ASP.NET Core 5.0+** with a minimal hosting model (Program.cs), add the auto-registration in the ConfigureServices section
 
 ```csharp
 using AutoRegister;
