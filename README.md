@@ -5,7 +5,7 @@
 <div align="center">
   <img src="https://github.com/raihannishat/Auto-Register/blob/main/icon.png?raw=true" alt="Package Icon"/>
 </div>
-
+<br>
 The **Auto-Register** package simplifies service registration for ASP.NET Core applications by automatically discovering and registering services based on custom attributes. This package eliminates the need for manually adding services in Program.cs, supports multiple service lifetimes, and ensures no duplicate registrations occur.
 
 With Auto-Register, services are identified using the RegisterAttribute and are automatically registered as self, interface, or base class implementations.
