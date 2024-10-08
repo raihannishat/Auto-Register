@@ -1,31 +1,35 @@
+# This is a basic workflow to help you get started with Actions
 name: CI-CD
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 
 on:
   push:
     branches: [ main ]
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: [ '6.0.x', '7.0.x', '8.0.x' ]  # Define multiple .NET versions
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}  # Use matrix value for .NET version
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-        working-directory: ./src/AutoRegister
-      - name: Create NuGet Package
-        run: dotnet pack -c Release /p:Version="8.0.3" /p:PackageReleaseNotes="See https://github.com/raihannishat/Auto-Register"
-        working-directory: ./src/AutoRegister
-      - name: Archive NuGet Package
-        uses: actions/upload-artifact@v4
-        with:
+    - uses: actions/checkout@v3
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+      working-directory: ./src/AutoRegister
+    - name: Create NuGet Package
+      run: dotnet pack -c Release /p:Version="8.0.3" /p:PackageReleaseNotes="See https://github.com/raihannishat/Auto-Register" 
+      working-directory: ./src/AutoRegister
+    - name: Archive NuGet Package
+      uses: actions/upload-artifact@v4
+      with:
           name: AutoRegister
           path: ./src/AutoRegister/bin/Release/AutoRegister.8.0.3.nupkg
-      - name: Publish Nuget Package
-        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.my_nuget_package_secret }} --source https://api.nuget.org/v3/index.json -n --skip-duplicate
+    - name: Publish Nuget Package
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.my_nuget_package_secret }} --source https://api.nuget.org/v3/index.json -n --skip-duplicate
+      
