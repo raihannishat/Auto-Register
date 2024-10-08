@@ -1,54 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-
-		<!-- NuGet package properties -->
-		<PackageId>Auto-Register</PackageId>
-		<Authors>Raihan Nishat</Authors>
-		<Description>
-			The Auto-Register NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core.
-			By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable
-			service registration logic, especially in large projects with many services.
-		</Description>
-		<PackageTags>
-			dependency-injection;attribute-based-di;aspnet-core;service-registration;automation;auto-register;inversion-of-control;dependency-inversion
-		</PackageTags>
-		<PackageProjectUrl>https://raihannishat.github.io/Auto-Register/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/raihannishat/Auto-Register</RepositoryUrl>
-
-		<!-- Embedding package icon in the package -->
-		<PackageIcon>icon.png</PackageIcon>
-
-		<!-- License information -->
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-
-		<!-- Packaging options -->
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<IncludeSymbols>true</IncludeSymbols>
-		<IncludeSource>true</IncludeSource>
-		<DebugType>embedded</DebugType>
-		<Optimize>true</Optimize>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<Deterministic>true</Deterministic>
-
-		<!-- Compiler Flags -->
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<LangVersion>latest</LangVersion>
-		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-		<Optimize>true</Optimize>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<!-- References to other NuGet packages -->
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<!-- Ensure icon.png is packed correctly -->
-		<None Include="icon.png" Pack="true" PackagePath=""/>
-	</ItemGroup>
+  <PropertyGroup>
+  	<TargetFramework>net8.0</TargetFramework>
+  	<ImplicitUsings>enable</ImplicitUsings>
+  	<Nullable>enable</Nullable>
+  
+  	<!-- NuGet package properties -->
+  	<PackageId>Auto-Register</PackageId>
+  	<Authors>Raihan Nishat</Authors>
+  	<Description>
+  		The Auto-Register NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core.
+  		By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable
+  		service registration logic, especially in large projects with many services.
+  	</Description>
+  	<PackageTags>
+  		dependency-injection;attribute-based-di;aspnet-core;service-registration;automation;auto-register;inversion-of-control;dependency-inversion
+  	</PackageTags>
+  	<PackageProjectUrl>https://raihannishat.github.io/Auto-Register/</PackageProjectUrl>
+  	<RepositoryUrl>https://github.com/raihannishat/Auto-Register</RepositoryUrl>
+  
+  	<!-- Embedding package icon in the package -->
+  	<PackageIcon>icon.png</PackageIcon>
+  
+  	<!-- URL to the icon for NuGet.org -->
+  	<PackageIconUrl>https://github.com/raihannishat/Auto-Register/raw/main/icon.png</PackageIconUrl>
+  
+  	<!-- License information -->
+  	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+  
+  	<!-- Packaging options -->
+  	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  	<IncludeSymbols>true</IncludeSymbols>
+  	<IncludeSource>true</IncludeSource>
+  	<DebugType>embedded</DebugType>
+  	<Optimize>true</Optimize>
+  	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  	<Deterministic>true</Deterministic>
+  
+  	<!-- Compiler Flags -->
+  	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  	<LangVersion>latest</LangVersion>
+  	<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  	<Optimize>true</Optimize>
+  </PropertyGroup>
+  
+  <ItemGroup>
+  	<!-- References to other NuGet packages -->
+  	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  	<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+  		<PrivateAssets>all</PrivateAssets>
+  		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  	</PackageReference>
+  
+  	<!-- Ensure icon.png is packed correctly -->
+  	<None Include="..\..\icon.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 </Project>
