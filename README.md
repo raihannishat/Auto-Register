@@ -3,7 +3,7 @@
 # Auto-Register
 ## Overview
 <div align="center">
-  <img src="https://github.com/raihannishat/Auto-Register/blob/main/icon.png?raw=true" alt="Package Icon width="300"/>
+  <img src="https://github.com/raihannishat/Auto-Register/blob/main/icon.png?raw=true" alt="Package Icon"/>
 </div>
 <br>
 
