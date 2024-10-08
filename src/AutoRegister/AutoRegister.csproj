@@ -7,14 +7,8 @@
   	<!-- NuGet package properties -->
   	<PackageId>Auto-Register</PackageId>
   	<Authors>Raihan Nishat</Authors>
-  	<Description>
-  		The Auto-Register NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core.
-  		By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable
-  		service registration logic, especially in large projects with many services.
-  	</Description>
-  	<PackageTags>
-  		dependency-injection;attribute-based-di;aspnet-core;service-registration;automation;auto-register;inversion-of-control;dependency-inversion
-  	</PackageTags>
+  	<Description>The Auto-Register NuGet package provides a powerful and flexible way to manage service registration in ASP.NET Core. By automating service discovery and registration, it reduces boilerplate code and helps maintain clean and maintainable service registration logic, especially in large projects with many services.</Description>
+  	<PackageTags>dependency-injection;attribute-based-di;aspnet-core;service-registration;automation;auto-register;inversion-of-control;dependency-inversion</PackageTags>
   	<PackageProjectUrl>https://raihannishat.github.io/Auto-Register/</PackageProjectUrl>
   	<RepositoryUrl>https://github.com/raihannishat/Auto-Register</RepositoryUrl>
   
