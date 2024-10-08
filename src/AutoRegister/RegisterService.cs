@@ -134,7 +134,7 @@ internal static class RegisterService
 
     private static (Type? baseType, Type[] interfaces) FindBaseOrInterfaceType(Type type)
     {
-        Type? baseType = type.BaseType != typeof(object) ? type.BaseType : null;
+        var baseType = type.BaseType != typeof(object) ? type.BaseType : null;
         var interfaces = type.GetInterfaces();
         return (baseType, interfaces);
     }
