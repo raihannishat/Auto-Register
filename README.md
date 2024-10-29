@@ -294,7 +294,7 @@ public interface IMyProcess
 #### [Output] : Entity with ID 3ccac989-03bc-4a17-9ae1-ff444140b185 and the type is Customer
 
 ##
-#### Here are a few more examples that expand on the Advanced Generic Service Processing model with auto-registration and dependency injection in ASP.NET Core.
+### Here are a few more examples that expand on the Advanced Generic Service Processing model with auto-registration and dependency injection in ASP.NET Core.
 ##
 
 ### Example 1: Simple Open Generic Interface and Class
