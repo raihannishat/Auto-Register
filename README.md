@@ -142,7 +142,7 @@ public class MyService : IMyService
 Services marked with the RegisterAttribute are automatically discovered and registered based on their lifetime **(Singleton, Scoped, or Transient)**
 
 ### 2. Interface and Base Class Registration:
-Classes can be registered not only as themselves but also as their **interfaces, abstract or any base** classes.
+Classes can be registered not only as themselves but also as their **interfaces, abstract or any base** class.
 
 ### 3. Self-Registration:
 Classes that do not implement interfaces or inherit from abstract base classes can still be **self-registered** in the service collection.
@@ -184,6 +184,118 @@ Auto-Register is designed for use any types of .NET applications that support Mi
 * Windows Forms Applications
 
 I am showing some examples through a **console** application
+
+### Advanced Generic Service Processing with Auto Registration in ASP.NET Core
+```csharp
+using AutoRegister;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+
+var services = new ServiceCollection();
+services.AddAutoregister(Assembly.GetExecutingAssembly());
+using var serviceProvider = services.BuildServiceProvider();
+
+var processor = serviceProvider.GetRequiredService<IMyProcess>();
+processor.Save(new Customer());
+
+public interface IEntity
+{
+    Guid Id { get; }
+}
+
+public interface IRepository<T> where T : IEntity
+{
+    void Save(T entity);
+}
+
+[Register(ServiceLifetime.Transient)]
+public class Repository<T> : IRepository<T> where T : IEntity, new()
+{
+    public void Save(T entity)
+    {
+        Console.WriteLine($"Entity with ID {entity.Id} has been saved.");
+    }
+}
+
+public interface IService<T> where T : IEntity
+{
+    void Process(T entity);
+}
+
+[Register(ServiceLifetime.Transient)]
+public class Service<T> : IService<T> where T : IEntity, new()
+{
+    private readonly IRepository<T> _repository;
+
+    public Service(IRepository<T> repository)
+    {
+        _repository = repository;
+    }
+
+    public void Process(T entity)
+    {
+        Console.WriteLine($"Processing entity with ID {entity.Id}...");
+        _repository.Save(entity);
+    }
+}
+
+public class Customer : IEntity
+{
+    public Guid Id { get; private set; }
+
+    public Customer()
+    {
+        Id = Guid.NewGuid();
+    }
+}
+
+[Register(ServiceLifetime.Transient)]
+public class Processor<TRepository, TService, TEntity>
+    where TRepository : IRepository<TEntity>
+    where TService : IService<TEntity>
+    where TEntity : IEntity, new()
+{
+    private readonly TRepository _repository;
+    private readonly TService _service;
+
+    public Processor(TRepository repository, TService service)
+    {
+        _repository = repository;
+        _service = service;
+    }
+
+    public void Execute()
+    {
+        TEntity entity = new TEntity();
+        Console.WriteLine($"Executing for entity with ID {entity.Id}...");
+        _service.Process(entity);
+    }
+}
+
+[Register(ServiceLifetime.Transient)]
+public class AdvanceProcess : Processor<Repository<Customer>, Service<Customer>, Customer>, IMyProcess
+{
+    public AdvanceProcess(Repository<Customer> repository, Service<Customer> service) 
+        : base(repository, service)
+    {
+    }
+
+    public void Save(Customer entity)
+    {
+        Console.WriteLine($"Entity with ID {entity.Id} and the type is {entity.GetType().FullName}");
+    }
+}
+
+public interface IMyProcess
+{
+    void Save(Customer entity);
+}
+```
+#### [Output] : Entity with ID 3ccac989-03bc-4a17-9ae1-ff444140b185 and the type is Customer
+
+##
+### Here are a few more examples that expand on the Advanced Generic Service Processing model with auto-registration and dependency injection in ASP.NET Core.
+##
 
 ### Example 1: Simple Open Generic Interface and Class
 ```csharp
